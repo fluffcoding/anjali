@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block content %}
+<div class="card p-3 m-3">
+    <h3>Pending Expenses.</h3>
+    <h4>Department: {{department.department_name}}</h4>
+    <p>
+        Remaining Monthly Budget: {{department.remaining_monthly_budget|intcomma}} Rs<br>
+    </p>
+    {% for expense in expenses %}
+    <div class="card p-2 mt-2">
+        <p>
+            Expense by {{expense.employee.username}}
+        </p>
+        <h5>
+            Recorded on {{expense.date|date}}
+        </h5>
+        <p style="margin: 0;">
+            Total Amount:
+            <b>{{expense.total_amount }}</b>
+            {% if expense.form_status_head == None %}
+            <span class="badge bg-warning" style="border-radius: 20px;">Pending</span>
+            {% elif expense.form_status_head %}
+            <span class="badge bg-success" style="border-radius: 20px;">Accepted</span>
+            {% elif not expense.form_status_head %}
+            <span class="badge bg-danger" style="border-radius: 20px;">Rejected</span>
+            {% endif %}
+            <br>
+            <span class="badge bg-dark mt-3" style="border-radius: 20px;">Hotel Rent: {{expense.hotel_rent }}</span>
+            <span class="badge bg-dark" style="border-radius: 20px;">Transport: {{expense.transport }}</span>
+            <span class="badge bg-dark" style="border-radius: 20px;">Meal: {{expense.meal }}</span>
+            <span class="badge bg-dark" style="border-radius: 20px;">Expense: {{expense.others }}</span>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{expense.id}}">
+                <!-- <div class="form-check">
+                    <input
+                        class="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                    >
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Accept
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input
+                        class="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                        checked
+                    >
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Reject
+                    </label>
+                </div> -->
+                <div class="form-check form-switch m-3">
+                    <input class="form-check-input" name="switch" type="checkbox" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Accept (On)/Reject(Off)</label>
+                  </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+
+            </form>
+        </p>
+    </div>
+    {% endfor %}
+    <p class="mt-3">
+        This page contains only pending expenses.
+        <a href="{% url 'allExpensesView' department.id %}">Click here</a>
+        to view all expenses.
+    </p>
+</div>
+{% endblock %}

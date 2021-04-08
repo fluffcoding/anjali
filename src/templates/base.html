@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/ff00e4a8c7.js" crossorigin="anonymous"></script>
+    <title>Budgeting!</title>
+  </head>
+  <body class="bg-dark">
+<div class="container" style="width: 700px;">
+  <div style="left: 0; top: 0; margin: 1rem; position: absolute;">
+    <p class="text-white">
+        <a class="text-white" style="text-decoration: none;" href="{% url 'iredirect' %}">
+            Homepage
+        </a>
+    </p>
+</div>
+  <div style="right: 0; top: 0; margin: 1rem; position: absolute;">
+    <p class="text-white">
+        {% if request.user.is_authenticated %}
+        logged in as {{request.user.username}}
+        {% else %}
+        <a class="text-white" style="text-decoration: none;" href="{% url 'account_login' %}">
+            Click to log in
+        </a>
+        {% endif %}
+    </p>
+</div>
+    {% block content %}{% endblock %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+</script>
+  </body>
+</html>

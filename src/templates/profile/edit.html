@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="card p-3 m-3">
+    <h3>Editing {{user.username|capfirst}}'s profile</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button type="submit" class="btn btn-primary mt-3">Update</button>
+    </form>
+</div>
+
+{% endblock %}

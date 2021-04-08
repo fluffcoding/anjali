@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card p-3 m-3">
+    <h3>Pending Expenses.</h3>
+    {% for expense in expenses %}
+    <div class="card p-2 mt-2">
+        <p>
+            Expense by {{expense.employee.email}}
+        </p>
+        <h5>
+            Recorded on {{expense.date|date}}
+        </h5>
+        <p style="margin: 0;">
+            Total Amount:
+            <b>{{expense.total_amount }}</b>
+            {% if expense.form_status == None %}
+            <span class="badge bg-warning" style="border-radius: 20px;">Pending</span>
+            {% elif expense.form_status %}
+            <span class="badge bg-success" style="border-radius: 20px;">Accepted</span>
+            {% elif not expense.form_status %}
+            <span class="badge bg-danger" style="border-radius: 20px;">Rejected</span>
+            {% endif %}
+            <br>
+            <span class="badge bg-dark mt-3" style="border-radius: 20px;">Hotel Rent: {{expense.hotel_rent }}</span>
+            <span class="badge bg-dark" style="border-radius: 20px;">Transport: {{expense.transport }}</span>
+            <span class="badge bg-dark" style="border-radius: 20px;">Meal: {{expense.meal }}</span>
+            <span class="badge bg-dark" style="border-radius: 20px;">Expense: {{expense.others }}</span>
+        </p>
+    </div>
+    {% endfor %}
+    <p class="mt-3">
+        This page contains all expenses.
+        <a href="{% url 'expenseApprovalView' department.id %}">Click here</a>
+        to view and edit pending expenses.
+    </p>
+</div>
+{% endblock %}
