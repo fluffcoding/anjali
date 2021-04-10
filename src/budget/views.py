@@ -33,7 +33,7 @@ def expenseApprovalRequest(request):
     if form.is_valid():
         expense = form.save(commit=False)
         expense.employee = request.user
-        total = int(form.cleaned_data['hotel_rent']) + int(form.cleaned_data['transport']) + int(
+        total = int(form.cleaned_data['airfare']) + int(form.cleaned_data['hotel_rent']) + int(form.cleaned_data['transport']) + int(
             form.cleaned_data['meal']) + int(form.cleaned_data['others'])
         expense.total_amount = total
         expense.department = profile.department

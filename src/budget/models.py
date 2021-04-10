@@ -119,7 +119,7 @@ class Expenses(models.Model):
     hotel_rent = models.IntegerField(null=True, blank=True)
     transport = models.IntegerField(null=True, blank=True)
     meal = models.IntegerField(null=True, blank=True)
-    others = models.IntegerField(null=True, blank=True)
+    others = models.IntegerField(null=True, blank=True, default=0)
     remarks = models.TextField(null=True, blank=True)
     form_status_head = models.BooleanField(default=None, null=True, blank=True)
     form_status_payment = models.BooleanField(default=None, null=True, blank=True)
