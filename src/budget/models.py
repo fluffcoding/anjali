@@ -119,12 +119,18 @@ class Expenses(models.Model):
     hotel_rent = models.IntegerField(null=True, blank=True)
     transport = models.IntegerField(null=True, blank=True)
     meal = models.IntegerField(null=True, blank=True)
-    others = models.IntegerField(null=True, blank=True, default=0)
+    others = models.IntegerField(default=0)
     remarks = models.TextField(null=True, blank=True)
     form_status_head = models.BooleanField(default=None, null=True, blank=True)
     form_status_payment = models.BooleanField(default=None, null=True, blank=True)
     total_amount = models.IntegerField(null=True, blank=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=True, null=True)
+
+
+    def total(self):
+        total = self.airfare + self.hotel_rent + self.transport + self.meal + self.others
+        self.total_amount = total
+        return total
 
 
     def form_status(self):
