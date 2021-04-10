@@ -26,29 +26,31 @@ def indexRedirect(request):
 
 @login_required
 def expenseApprovalRequest(request):
-    employeesExpenses = Expenses.objects.filter(employee=request.user).order_by('-id')
-    form = expenseApprovalForm(request.POST or None)
-    profile = Profile.objects.get(user=request.user)
-    department = profile.department
-    if form.is_valid():
-        expense = form.save(commit=False)
-        expense.employee = request.user
-        expense.total()
-        expense.department = profile.department
-        expense.save()
-        if department.expense_approval(expense.id):
-            pass
-        else:
-            expense.form_status_head = False
+    if not request.user.profile.head or not request.user.profile.admin:
+        employeesExpenses = Expenses.objects.filter(employee=request.user).order_by('-id')
+        form = expenseApprovalForm(request.POST or None)
+        profile = Profile.objects.get(user=request.user)
+        department = profile.department
+        if form.is_valid():
+            expense = form.save(commit=False)
+            expense.employee = request.user
+            expense.total()
+            expense.department = profile.department
             expense.save()
-        return redirect('expenseApprovalRequest')
-    context = {
-        'form': form,
-        'expenses': employeesExpenses,
-        'department': department
-    }
-    return render(request, 'expense_approval/form.html', context)
-
+            if department.expense_approval(expense.id):
+                pass
+            else:
+                expense.form_status_head = False
+                expense.save()
+            return redirect('expenseApprovalRequest')
+        context = {
+            'form': form,
+            'expenses': employeesExpenses,
+            'department': department
+        }
+        return render(request, 'expense_approval/form.html', context)
+    else:
+        return HttpResponse('<h1>Department Heads or payment department admins can not incur expenses</h1>')
 
 
 @login_required
@@ -156,7 +158,7 @@ def profileCreate(request):
 @login_required
 def paymentsView(request):
     if request.user.profile.admin:
-        expenses = Expenses.objects.all()
+        expenses = Expenses.objects.filter(form_status_head=True)
         if request.method == "POST":
             if 'approve' in request.POST:
                 id = request.POST.get('id')
