@@ -21,7 +21,7 @@ class expenseApprovalForm(forms.ModelForm):
     meal = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter Amount in PKR'}))
     # travel_date = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter Travel Date'}))
     airfare = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter Amount in PKR'}))
-    others = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter Amount in PKR'}))
+    # others = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Enter Amount in PKR'}))
     remarks = forms.Textarea()
     class Meta:
         model = Expenses
@@ -31,7 +31,7 @@ class expenseApprovalForm(forms.ModelForm):
         }
 
 
-class DepartmentForm(forms.ModelForm):
+class NewDepartmentForm(forms.ModelForm):
     class Meta:
         model = Department
         fields = '__all__'
@@ -42,3 +42,9 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ('user',)
+
+
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('department',)

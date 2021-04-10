@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="card mt-2 p-3 mb-3">
+    <h5>
+        Recorded on {{expense.date|date}}, Expense by {{expense.employee.username}}
+    </h5>
+    {% if payment_status == False and expense.form_status %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="payment" value="{{expense.id}}">
+        <button class="btn btn-dark mt-3 mb-3" type="submit">Make Payment</button>
+    </form>
+    {% else %}
+    <p>Approve to make payment, or payment has already been made.</p>
+    {% endif %}
+    <p style="margin: 0;">
+        Total Amount: 
+        <b>{{expense.total_amount }}</b>
+        {% if expense.form_status == None %}
+        <span class="badge bg-warning" style="border-radius: 20px;">Pending</span>
+        {% elif expense.form_status %}
+        <span class="badge bg-success" style="border-radius: 20px;">Accepted</span>
+        {% elif not expense.form_status %}
+        <span class="badge bg-danger" style="border-radius: 20px;">Rejected</span>
+        {% endif %}
+        <br>
+        <span class="badge bg-dark mt-3" style="border-radius: 20px;">Hotel Rent: {{expense.hotel_rent }}</span>
+        <span class="badge bg-dark" style="border-radius: 20px;">Transport: {{expense.transport }}</span>
+        <span class="badge bg-dark" style="border-radius: 20px;">Meal: {{expense.meal }}</span>
+        <span class="badge bg-dark" style="border-radius: 20px;">Others: {{expense.others }}</span>
+    </p>
+    
+</div>
+{% if payment_status != False %}
+    <div class="card mt-3 p-3">
+        <h4>Payment Slip</h4>
+        <p>
+            Payment ID: {{payment_status.id}}<br>
+            Date: {{payment_status.date}}<br>
+            Expense ID: {{expense.id}}<br>
+            Recipient: {{expense.employee.username}}<br>
+            Recipient ID: {{expense.employee.id}}<br>
+        </p>        
+    </div>
+    {% endif %}
+
+<button class="btn btn-light mt-3" onclick="print()">Print Document</button>
+{% endblock %}

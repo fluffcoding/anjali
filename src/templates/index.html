@@ -19,20 +19,22 @@
                 <p>Department Head</p>
             </a>
             {% elif request.user.is_authenticated %}
-                <a type="button"  class="text-white" style="text-decoration: none;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="You are not a department head">
+                <a type="button"  href="{% url 'expenseApprovalView' request.user.profile.department.id %}" class="text-white" style="text-decoration: none;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="You are not a department head">
                 <i class="fas fa-user iconsize"></i><br>
                     Department Head
                 </a>
             {% elif not request.user.is_authenticated %}
-            <a type="button"  class="text-white" style="text-decoration: none;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Only department heads can access (please login)">
+            <a type="button"  href="{% url 'account_login' %}" class="text-white" style="text-decoration: none;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Only department heads can access (please login)">
                 <i class="fas fa-user iconsize"></i><br>
                     Department Head
                 </a>
             {% endif %}
         </div>
         <div class="col-3">
+            <a href="{% url 'payments' %}" class="text-white" style="text-decoration: none;">
             <i class="fas fa-credit-card iconsize"></i><br>
-            <p>Payment</p>
+                <p>Payment</p>
+            </a>
         </div>
         <div class="col-3">
             {% if request.user.profile.admin %}

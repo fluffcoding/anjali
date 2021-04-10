@@ -4,20 +4,20 @@
 
 
 {% block content %}
-    <div class="card m-3 p-3">
-        <h3 class="">Welcome, {{request.user.username|capfirst}}!</h3>
-        <a href="{% url 'account_logout' %}">Logout</a>
-        <p>Department: {{department.department_name}}</p>
-    <form method="post">
+    <!-- <div class="card m-3 p-3"> -->
+        <h3 class="mt-5 text-light">Welcome, {{request.user.username|capfirst}}!</h3>
+        <!-- <a href="{% url 'account_logout' %}">Logout</a> -->
+        <p class="text-light">Department: {{department.department_name}}</p>
+    <form method="post" class="text-light">
         {% csrf_token %}
         {{form|crispy}}
-        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        <button type="submit" class="btn btn-light mt-3">Submit</button>
     </form>
-    </div>
-    <div class="card p-3 m-3">
-        <h3>Expenses</h3>
+    <!-- </div> -->
+    <!-- <div class="card p-3 m-3"> -->
+        <h3 class="text-light mt-5">Expenses</h3>
         {% for expense in expenses %}
-        <div class="card mt-2 p-3">
+        <div class="card mt-2 p-3 mb-3">
             <h5>
                 Recorded on {{expense.date|date}}
             </h5>
@@ -35,11 +35,11 @@
                 <span class="badge bg-dark mt-3" style="border-radius: 20px;">Hotel Rent: {{expense.hotel_rent }}</span>
                 <span class="badge bg-dark" style="border-radius: 20px;">Transport: {{expense.transport }}</span>
                 <span class="badge bg-dark" style="border-radius: 20px;">Meal: {{expense.meal }}</span>
-                <span class="badge bg-dark" style="border-radius: 20px;">Expense: {{expense.others }}</span>
+                <span class="badge bg-dark" style="border-radius: 20px;">Others: {{expense.others }}</span>
             </p>
         </div>
         {% empty %}
         <p>You have no recorded expenses.</p>
         {% endfor %}
-    </div>
+    <!-- </div> -->
 {% endblock %}

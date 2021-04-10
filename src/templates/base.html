@@ -11,18 +11,19 @@
     <title>Budgeting!</title>
   </head>
   <body class="bg-dark">
-<div class="container" style="width: 700px;">
+<div class="container" style="width: 800px;">
   <div style="left: 0; top: 0; margin: 1rem; position: absolute;">
     <p class="text-white">
         <a class="text-white" style="text-decoration: none;" href="{% url 'iredirect' %}">
-            Homepage
+          Employee Expense Approval
         </a>
     </p>
 </div>
   <div style="right: 0; top: 0; margin: 1rem; position: absolute;">
     <p class="text-white">
         {% if request.user.is_authenticated %}
-        logged in as {{request.user.username}}
+        Logged in as {{request.user.username}}<br>
+        <a class="text-white" style="text-decoration: none;" href="{% url 'account_logout' %}">Log out</a>
         {% else %}
         <a class="text-white" style="text-decoration: none;" href="{% url 'account_login' %}">
             Click to log in

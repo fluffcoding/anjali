@@ -7,6 +7,8 @@ from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth import get_user_model
 
+from django.utils.timezone import now
+
 
 User = get_user_model()
 
@@ -112,7 +114,7 @@ class Profile(models.Model):
 class Expenses(models.Model):
     employee = models.ForeignKey(User,models.CASCADE)
     date = models.DateTimeField(auto_now=True)
-    travel_date = models.DateField(null=True, blank=True)
+    travel_date = models.DateField(default=now)
     airfare = models.IntegerField(null=True, blank=True)
     hotel_rent = models.IntegerField(null=True, blank=True)
     transport = models.IntegerField(null=True, blank=True)
@@ -128,6 +130,8 @@ class Expenses(models.Model):
     def form_status(self):
         if self.form_status_head is True and self.form_status_payment is True:
             return True
+        elif self.form_status_head is False or self.form_status_payment is False:
+            return False
         elif self.form_status_head is None or self.form_status_payment is None:
             return None
         else:
@@ -163,3 +167,8 @@ class Expenses(models.Model):
 #         else:
 #             return True
 
+
+class Payment(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    expense = models.ForeignKey(Expenses, on_delete=models.CASCADE)
+    

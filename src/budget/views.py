@@ -1,12 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required
 
-from .forms import expenseApprovalForm, DepartmentForm, UserForm, ProfileForm
+from .forms import expenseApprovalForm, DepartmentForm, UserForm, ProfileForm, NewDepartmentForm
 
-from .models import Expenses, Department, Profile
+from .models import Expenses, Department, Profile, Payment
 
 from django.contrib.auth.models import User
 
@@ -103,7 +103,7 @@ def index(request):
 
 
 def settingsView(request):
-    form = DepartmentForm(request.POST or None)
+    form = NewDepartmentForm(request.POST or None)
     depts = Department.objects.all()
     user_form = UserForm(request.POST or None)
     users = User.objects.filter(is_staff=False)
@@ -139,3 +139,63 @@ def profileEdit(request, id):
         return render(request, 'profile/edit.html', context)
     else:
         return HttpResponse("<h1>Not Authorized</h1>")
+
+
+@login_required
+def profileCreate(request):
+    profile = get_object_or_404(Profile, user=request.user)
+    form = DepartmentForm(request.POST or None)
+    if form.is_valid():
+        profile.department = form.cleaned_data['department']
+        profile.save()
+        print(form.cleaned_data)
+        return redirect('iredirect')
+    context = {
+        'form': form,
+    }
+    return render(request, 'profile/create.html', context)
+
+@login_required
+def paymentsView(request):
+    if request.user.profile.admin:
+        expenses = Expenses.objects.all()
+        if request.method == "POST":
+            if 'approve' in request.POST:
+                id = request.POST.get('id')
+                the_expense = Expenses.objects.get(id=id)
+                the_expense.form_status_payment = True
+                the_expense.save()
+                return redirect('payments')
+            if 'reject' in request.POST:
+                id = request.POST.get('id')
+                the_expense = Expenses.objects.get(id=id)
+                the_expense.form_status_payment = False
+                the_expense.save()
+                return redirect('payments')
+        context = {
+            'expenses': expenses
+        }
+        return render(request, 'payment/main.html', context)
+    else:
+        return HttpResponse('<h1>You are not registered as an admin.<a href="/">Go Home</a></h1>')
+
+
+def singlePayment(request, id):
+    expense = Expenses.objects.get(id=id)
+    try:
+        payment_status = Payment.objects.get(expense=expense)
+    except:
+        payment_status = False
+    print(payment_status)
+
+    if request.method == 'POST':
+        # id = int(request.POST.get('payment'))
+        # exp = Expenses.objects.get(id=id)
+        payment = Payment.objects.create(expense=expense)
+        payment.save()
+        return redirect('single-payments', expense.id)
+    context = {
+        'expense': expense,
+        'payment_status': payment_status,
+    }
+    return render(request, 'payment/single.html', context)

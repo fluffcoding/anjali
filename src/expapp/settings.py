@@ -144,3 +144,6 @@ LOGIN_REDIRECT_URL = '/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+ACCOUNT_SIGNUP_REDIRECT_URL = '/profile-create'

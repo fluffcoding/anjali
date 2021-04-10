@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3 class="text-light mt-5">Payments</h3>
+<table class="table table-dark mt-3">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Total Amount</th>
+            <th scope="col">Status</th>
+            <th scope="col">Head Approval</th>
+            <th scope="col">Approve</th>
+            <th scope="col">Reject</th>
+            <th scope="col">Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for expense in expenses %}
+        <tr>
+            <th scope="row">{{expense.id}}</th>
+            <td>{{expense.employee.username}}</td>
+            <td>{{expense.date|date}}</td>
+            <td>{{expense.total_amount}}</td>
+            <td>
+                {% if expense.form_status == None %}
+                Pending
+                {% elif expense.form_status %}
+                Accepted
+                {% elif not expense.form_status %}
+                Rejected
+                {% endif %}
+            </td>
+            <td>
+                {% if expense.form_status_head == None %}
+                Pending
+                {% elif expense.form_status_head %}
+                Accepted
+                {% elif not expense.form_status_head %}
+                Rejected
+                {% endif %}
+            </td>
+            <td>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{expense.id}}">
+                    <button type="submit" class="btn btn-light" name='approve'>Approve</button>
+                </form>
+            </td>
+            <td>
+                <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{expense.id}}">
+                <button type="submit" class="btn btn-danger" name='reject'>Reject</button>
+            </form>
+            <td>
+                <a href="{% url 'single-payments' expense.id %}" class="text-light" style="font-size: 25px;"><i class="fas fa-info-circle"></i></a>
+            </td>
+        </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<small class="text-light">Status will be approved if both the department head and the payment department approve the expense.</small>
+{% endblock %}

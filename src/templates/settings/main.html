@@ -3,14 +3,14 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="card m-3 p-4">
+<div class="text-light mt-5">
     <div class="row">
         <div class="col-6">
             <h4>Add Department</h4>
             <form method="POST">
                 {% csrf_token %}
         {{form|crispy}}
-                <button type="submit" class="btn btn-primary mt-3">Add Department</button>
+                <button type="submit" class="btn btn-light mt-3">Add Department</button>
             </form>
         </div>
         <div class="col-6">
@@ -18,7 +18,7 @@
             <form method="POST">
                 {% csrf_token %}
                 {{user_form|crispy}}
-                <button type="submit" class="btn btn-primary mt-3">Add User</button>
+                <button type="submit" class="btn btn-light mt-3">Add User</button>
             </form>
         </div>
     </div>
@@ -27,8 +27,8 @@
             <div class="col-6">
                 <h4>Departments</h4>
                 {% for dept in depts %}
-                <div class="card p-3">
-                    <h5>{{dept.department_name}}</h5>
+                <div class="card p-3 mb-2">
+                    <h5 class="text-dark">{{dept.department_name}}</h5>
                 </div>
                 {% empty %}
                 <p>No departments were added.</p>
@@ -37,8 +37,8 @@
             <div class="col-6">
                 <h4>Users</h4>
                 {% for user in users %}
-                <div class="card p-3">
-                    <a href="{% url 'editProfile' user.id %}">
+                <div class="card p-3 mb-2">
+                    <a class="text-dark" style="text-decoration: none;" href="{% url 'editProfile' user.id %}">
                         <h5>{{user.username}}</h5>
                     </a>
                 </div>
@@ -49,6 +49,6 @@
             </div>
         </div>
     </div>
-    <a href="{% url 'iredirect' %}" class="mt-3">Go to Homepage</a>
+    <a href="{% url 'iredirect' %}" class="mt-3 text-light">Go to Homepage</a>
 </div>
 {% endblock %}
